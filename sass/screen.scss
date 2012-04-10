@@ -1,0 +1,84 @@
+/* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+
+@import "compass/reset";
+@import "compass/css3/box-sizing";
+@import "compass/css3/transform";
+@import "compass/css3/transition";
+
+$rotate-speed: 1s;
+$inital-angle-offset: 360deg/6;
+
+* {
+	@include box-sizing(border-box);
+	font-family: 'Nova Mono';
+}
+
+body {
+	background-color: black;
+	color: #00FF00;
+	text-align: center;
+}
+
+.hidden {
+	display: none;
+}
+
+#hexagon {
+	display: inline-block;
+	text-align: left;
+	@include backface-visibility(visible);
+	@include perspective(200px);
+	@include perspective-origin(center center);
+
+	.tilt-plane {
+		display: inline-block;
+		@include transform-origin(center bottom 0px);
+		@include transform(translateZ(20px) rotateY(-20deg) rotateX(40deg));
+	}
+
+	.rotate-plane {
+		@include transition-property(all);
+		@include transition-duration($rotate-speed);
+		@include transition-timing-function(cubic-bezier(0,0,.77,1.58));
+		@include transform-origin(center center 0px);
+	}
+
+	pre {
+		font-size: 24px;
+		white-space: pre;
+		font-family: 'Nova Mono';
+		font-weight: 700;
+		letter-spacing: 0.5em;
+		line-height: 2em;
+		color: #008800;
+	}
+
+	a, a:link, a:visited, a:hover, a:active {
+		@include transition-property(all);
+		@include transition-duration($rotate-speed);
+		@include transition-timing-function(cubic-bezier(0,0,.77,1.58));
+		display: inline-block;
+		text-decoration: none;
+		color: #008800;
+	}
+
+}
+
+@for $i from 0 to 6 {
+	#pos#{$i}:target ~ #hexagon {
+		.rotate-plane {
+			@include transform(rotateZ(360deg / 6 * $i + $inital-angle-offset));
+		}
+		a {
+			@include rotateZ(-(360deg / 6 * $i + $inital-angle-offset));
+		}
+		a.pos#{$i} {
+			color: #00FF00;
+			font-weight: 1400;
+		}
+	}
+}
+
